@@ -3,7 +3,7 @@ import { SlideMessage, Photo } from './types';
 // The password to enter the site
 export const APP_PASSWORD = import.meta.env.VITE_APP_PASSWORD || "love";
 export const PASSWORD_HINT = "The answer is what makes the world go round (4 letters)";
-export const SHOW_LOADING_SCREEN = true; // Set to true to show "Coming Soon" screen
+export const SHOW_LOADING_SCREEN = false; // Set to true to show "Coming Soon" screen
 
 // Music URL - You can replace this with any MP3 link
 // export const MUSIC_URL = "https://cdn.pixabay.com/download/audio/2022/10/18/audio_31c2730e64.mp3"; 
