@@ -30,15 +30,18 @@ const LetterScreen: React.FC<LetterScreenProps> = ({ onPlanDate }) => {
 
                     <div className="text-left space-y-4 text-valentine-700 text-lg leading-relaxed mb-8 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
                         <p>
-                            Happy 10 Months!! I am so happy to be able to have spent 10 months and even more with you.
+                            Happy 10 Months!! I am so happy to be able to have spent 10 months and I look forward to spending many more. 
                         </p>
                         <p>
-                            Every moment with you is a treasure, and I can't wait to make even more beautiful memories together.
-                            You are my favorite person, my best friend, and now... my Valentine!
+                            Every moment with you is awesome, and I love the time we spend together.
+                            Whether its just staying in, going out, doing nothing, or just talking, I love just being around you, you make me so happy. 
+                            You are my favorite person, my best friend, my girlfrined, and now... my Valentine! YAYY!
                         </p>
                         <p>
-                            I wanted to do something special to ask you, because you deserve the world and more.
-                            Thank you for being you, and for making my life so much brighter.
+                            I wanted to do something special to ask you, but I didn't know what to do because of the distance.
+                            So I wanted to try something different and something a little interesting.
+                            Sorry for asking a little late, I hope you liked this little project I made.
+                            Thank you for being you, and for always supporting me. Happy 10 Months Gaby.
                         </p>
                         <p className="font-bold text-right mt-4">
                             - Kevin
