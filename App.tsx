@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
 import { AppState } from './types';
 import PasswordScreen from './components/PasswordScreen';
 import Slideshow from './components/Slideshow';
@@ -150,6 +151,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <Analytics />
     </div>
   );
 }
