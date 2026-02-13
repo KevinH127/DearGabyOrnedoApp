@@ -35,7 +35,7 @@ const LetterScreen: React.FC<LetterScreenProps> = ({ onPlanDate }) => {
                         <p>
                             Every moment with you is awesome, and I love the time we spend together.
                             Whether its just staying in, going out, doing nothing, or just talking, I love just being around you, you make me so happy. 
-                            You are my favorite person, my best friend, my girlfrined, and now... my Valentine! YAYY!
+                            You are my favorite person, my best friend, my girlfriend, and now... my Valentine! YAYY!
                         </p>
                         <p>
                             I wanted to do something special to ask you, but I didn't know what to do because of the distance.
