@@ -4,42 +4,40 @@ import { motion } from 'framer-motion';
 const Background: React.FC = () => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-      {/* Gradient Mesh Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100 animate-gradient-xy"></div>
+      {/* Soft gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-rose-50 to-fuchsia-50 animate-gradient-xy"></div>
       
-      {/* Floating Blobs for softness */}
-      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-rose-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-[-10%] left-[20%] w-96 h-96 bg-red-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+      {/* Soft floating orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-pink-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-blob"></div>
+      <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-fuchsia-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-30 animate-blob" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute bottom-[-10%] left-[30%] w-[450px] h-[450px] bg-rose-200 rounded-full mix-blend-multiply filter blur-[100px] opacity-35 animate-blob" style={{ animationDelay: '4s' }}></div>
 
-      {/* Floating Hearts */}
-      {[...Array(20)].map((_, i) => (
+      {/* Subtle floating sparkles */}
+      {[...Array(12)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute text-pink-400/40"
+          className="absolute rounded-full"
+          style={{
+            width: Math.random() * 4 + 2,
+            height: Math.random() * 4 + 2,
+            background: `rgba(236, 72, 153, ${Math.random() * 0.3 + 0.1})`,
+          }}
           initial={{
             y: "110vh",
             x: Math.random() * 100 + "vw",
-            scale: Math.random() * 0.5 + 0.5,
-            opacity: Math.random() * 0.3 + 0.1,
-            rotate: 0,
+            opacity: 0,
           }}
           animate={{
             y: "-10vh",
-            x: `calc(${Math.random() * 100}vw + ${Math.random() * 100 - 50}px)`,
-            rotate: 360,
+            opacity: [0, 0.6, 0],
           }}
           transition={{
-            duration: Math.random() * 20 + 15,
+            duration: Math.random() * 20 + 20,
             repeat: Infinity,
             ease: "linear",
             delay: Math.random() * -20,
           }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-          </svg>
-        </motion.div>
+        />
       ))}
     </div>
   );

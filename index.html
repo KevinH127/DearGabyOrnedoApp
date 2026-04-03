@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dear Gaby Ornedo</title>
+  <meta name="description" content="A little collection of letters, just for you." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,20 +20,6 @@
             script: ['"Dancing Script"', 'cursive'],
             sans: ['"Quicksand"', 'sans-serif'],
           },
-          colors: {
-            valentine: {
-              50: '#fff1f2',
-              100: '#ffe4e6',
-              200: '#fecdd3',
-              300: '#fda4af',
-              400: '#fb7185',
-              500: '#f43f5e',
-              600: '#e11d48',
-              700: '#be123c',
-              800: '#9f1239',
-              900: '#881337',
-            }
-          },
           animation: {
             'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             'blob': 'blob 7s infinite',
@@ -40,18 +27,10 @@
           },
           keyframes: {
             blob: {
-              "0%": {
-                transform: "translate(0px, 0px) scale(1)",
-              },
-              "33%": {
-                transform: "translate(30px, -50px) scale(1.1)",
-              },
-              "66%": {
-                transform: "translate(-20px, 20px) scale(0.9)",
-              },
-              "100%": {
-                transform: "translate(0px, 0px) scale(1)",
-              },
+              "0%": { transform: "translate(0px, 0px) scale(1)" },
+              "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+              "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+              "100%": { transform: "translate(0px, 0px) scale(1)" },
             },
             'gradient-xy': {
               '0%, 100%': {
@@ -72,8 +51,7 @@
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      background-color: #fff1f2;
+      background-color: #fdf2f8;
       font-family: 'Quicksand', 'Nunito', sans-serif !important;
     }
 
@@ -86,21 +64,15 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* Line clamp utility */
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-    "clsx": "https://esm.sh/clsx@^2.1.1",
-    "tailwind-merge": "https://esm.sh/tailwind-merge@^3.4.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.33.0"
-  }
-}
-</script>
-  <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>

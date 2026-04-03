@@ -1,0 +1,95 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Mail, ChevronRight } from 'lucide-react';
+import { Letter } from '../types';
+import { LETTERS } from '../constants';
+
+interface LetterGalleryProps {
+  onSelectLetter: (letter: Letter) => void;
+}
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring', damping: 25, stiffness: 200 } },
+};
+
+const LetterGallery: React.FC<LetterGalleryProps> = ({ onSelectLetter }) => {
+  return (
+    <div className="min-h-screen flex flex-col items-center px-4 py-12 md:py-16 overflow-y-auto">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="text-center mb-10 md:mb-14"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', damping: 15, delay: 0.2 }}
+          className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-400 to-fuchsia-400 shadow-lg shadow-pink-200/50 mb-6"
+        >
+          <Mail className="w-8 h-8 text-white" />
+        </motion.div>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight mb-3">
+          My Letters to You
+        </h1>
+        <p className="text-pink-400 font-medium text-sm md:text-base max-w-md">
+          I just have a lot on mind and wanted to talk to you,<br/>
+          so if you see this, this is how I've been feeling.
+        </p>
+      </motion.div>
+
+      {/* Letter Cards */}
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="w-full max-w-lg space-y-4"
+      >
+        {LETTERS.map((letter) => (
+          <motion.button
+            key={letter.id}
+            variants={item}
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => onSelectLetter(letter)}
+            className="w-full text-left group"
+          >
+            <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-5 md:p-6 border border-white/80 shadow-[0_4px_24px_0_rgba(236,72,153,0.08)] hover:shadow-[0_8px_40px_0_rgba(236,72,153,0.15)] transition-all duration-300">
+              <div className="flex items-start gap-4">
+                {/* Emoji / Icon */}
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-fuchsia-50 border border-pink-100/50 flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-pink-400" />
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <h3 className="font-bold text-gray-800 text-base md:text-lg truncate group-hover:text-pink-600 transition-colors">
+                      {letter.title}
+                    </h3>
+                    <ChevronRight className="w-5 h-5 text-pink-300 flex-shrink-0 group-hover:text-pink-500 group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+                    {letter.preview}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.button>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+export default LetterGallery;

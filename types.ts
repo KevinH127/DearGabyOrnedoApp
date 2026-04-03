@@ -1,20 +1,12 @@
 export enum AppState {
   PASSWORD = 'PASSWORD',
-  SLIDESHOW = 'SLIDESHOW',
-  TRANSITION = 'TRANSITION',
-  QUESTION = 'QUESTION',
-  SUCCESS = 'SUCCESS',
-  LETTER = 'LETTER',
-  PLANNER = 'PLANNER',
+  GALLERY = 'GALLERY',
+  READING = 'READING',
 }
 
-export interface SlideMessage {
+export interface Letter {
   id: number;
-  text: string;
-}
-
-export interface Photo {
-  id: number;
-  url: string;
-  rotation: number;
+  title: string;
+  preview: string;
+  file: string; // filename in public/letters/
 }
