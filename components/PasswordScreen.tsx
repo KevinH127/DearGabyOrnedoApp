@@ -54,7 +54,7 @@ const PasswordScreen: React.FC<PasswordScreenProps> = ({ onSuccess }) => {
               This page is locked
             </h2>
             <p className="text-sm text-pink-400 mt-2 font-medium">
-              Only you know the magic word ✨
+              Only you know the passwword
             </p>
           </div>
 
@@ -87,7 +87,7 @@ const PasswordScreen: React.FC<PasswordScreenProps> = ({ onSuccess }) => {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-pink-300 font-medium">
-              🤫 Hint: Only THE G.O.A.T herself can unlock this
+              Only the one and only can unlock this
             </p>
           </div>
         </div>

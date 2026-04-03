@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Private letter source files (unencrypted)
+letters-src/

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Heart, Loader2 } from 'lucide-react';
 import { Letter } from '../types';
+import { decryptLetter } from '../decrypt';
 
 interface LetterReaderProps {
   letter: Letter;
@@ -20,7 +21,8 @@ const LetterReader: React.FC<LetterReaderProps> = ({ letter, onBack }) => {
         if (!res.ok) throw new Error('Failed to load');
         return res.text();
       })
-      .then((text) => setContent(text))
+      .then((text) => decryptLetter(text))
+      .then((decrypted) => setContent(decrypted))
       .catch(() => setError(true));
   }, [letter.file]);
 
