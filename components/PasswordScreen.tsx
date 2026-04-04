@@ -87,7 +87,7 @@ const PasswordScreen: React.FC<PasswordScreenProps> = ({ onSuccess }) => {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-pink-300 font-medium">
-              Only the one and only can unlock this
+              Hi, if you don't know the password, text me lol jk
             </p>
           </div>
         </div>
