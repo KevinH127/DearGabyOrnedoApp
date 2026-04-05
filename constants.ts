@@ -21,7 +21,7 @@ export const LETTERS: Letter[] = [
   {
     id: 3,
     title: "April 4, 2026",
-    preview: "",
+    preview: "Hope you had lots of fun this weekend",
     file: "letter-3.txt",
   },
 ];
