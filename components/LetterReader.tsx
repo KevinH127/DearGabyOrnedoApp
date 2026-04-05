@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Heart, Loader2 } from 'lucide-react';
-import { Letter } from '../types';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { LETTERS } from '../constants';
 import { decryptLetter } from '../decrypt';
 
-interface LetterReaderProps {
-  letter: Letter;
-  onBack: () => void;
-}
+const LetterReader: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-const LetterReader: React.FC<LetterReaderProps> = ({ letter, onBack }) => {
+  const letter = LETTERS.find((l) => l.id === Number(id));
+
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    if (!letter) return;
     setContent(null);
     setError(false);
     fetch(`/letters/${letter.file}`)
@@ -24,7 +26,15 @@ const LetterReader: React.FC<LetterReaderProps> = ({ letter, onBack }) => {
       .then((text) => decryptLetter(text))
       .then((decrypted) => setContent(decrypted))
       .catch(() => setError(true));
-  }, [letter.file]);
+  }, [letter]);
+
+  if (!letter) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-pink-400 font-medium">Letter not found.</p>
+      </div>
+    );
+  }
 
   const paragraphs = content ? content.split('\n\n') : [];
 
@@ -40,7 +50,7 @@ const LetterReader: React.FC<LetterReaderProps> = ({ letter, onBack }) => {
         <motion.button
           whileHover={{ x: -3 }}
           whileTap={{ scale: 0.97 }}
-          onClick={onBack}
+          onClick={() => navigate('/gallery')}
           className="flex items-center gap-2 text-pink-400 hover:text-pink-600 transition-colors font-medium text-sm group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />

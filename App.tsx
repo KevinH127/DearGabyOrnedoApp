@@ -1,77 +1,51 @@
-import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
-import { AppState, Letter } from './types';
+import Background from './components/Background';
 import PasswordScreen from './components/PasswordScreen';
 import LetterGallery from './components/LetterGallery';
 import LetterReader from './components/LetterReader';
-import Background from './components/Background';
+
+// Wraps routes that require the user to have unlocked the app
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const isUnlocked = localStorage.getItem('unlocked') === 'true';
+  if (!isUnlocked) {
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
+};
 
 function App() {
-  const isUnlocked = typeof window !== 'undefined' && localStorage.getItem('unlocked') === 'true';
-  const [screen, setScreen] = useState<AppState>(isUnlocked ? AppState.GALLERY : AppState.PASSWORD);
-  const [selectedLetter, setSelectedLetter] = useState<Letter | null>(null);
-
-  const handlePasswordSuccess = () => {
-    localStorage.setItem('unlocked', 'true');
-    setScreen(AppState.GALLERY);
-  };
-
-  const handleSelectLetter = (letter: Letter) => {
-    setSelectedLetter(letter);
-    setScreen(AppState.READING);
-  };
-
-  const handleBackToGallery = () => {
-    setScreen(AppState.GALLERY);
-    setSelectedLetter(null);
-  };
-
   return (
-    <div className="min-h-screen font-sans selection:bg-pink-200 overflow-hidden relative">
-      {/* Global Background */}
-      <Background />
-
-      <AnimatePresence mode="wait">
-        {screen === AppState.PASSWORD && (
-          <motion.div
-            key="password"
-            exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-0 z-10"
-          >
-            <PasswordScreen onSuccess={handlePasswordSuccess} />
-          </motion.div>
-        )}
-
-        {screen === AppState.GALLERY && (
-          <motion.div
-            key="gallery"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-0 z-10 overflow-y-auto no-scrollbar"
-          >
-            <LetterGallery onSelectLetter={handleSelectLetter} />
-          </motion.div>
-        )}
-
-        {screen === AppState.READING && selectedLetter && (
-          <motion.div
-            key={`letter-${selectedLetter.id}`}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 30 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 z-10 overflow-y-auto no-scrollbar"
-          >
-            <LetterReader letter={selectedLetter} onBack={handleBackToGallery} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <Analytics />
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen font-sans selection:bg-pink-200 overflow-hidden relative">
+        <Background />
+        <div className="absolute inset-0 z-10 overflow-y-auto no-scrollbar">
+          <Routes>
+            <Route path="/" element={<PasswordScreen />} />
+            <Route
+              path="/gallery"
+              element={
+                <ProtectedRoute>
+                  <LetterGallery />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/letter/:id"
+              element={
+                <ProtectedRoute>
+                  <LetterReader />
+                </ProtectedRoute>
+              }
+            />
+            {/* Catch-all: redirect unknown paths to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+        <Analytics />
+      </div>
+    </BrowserRouter>
   );
 }
 

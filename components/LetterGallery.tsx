@@ -1,12 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Mail, ChevronRight } from 'lucide-react';
-import { Letter } from '../types';
 import { LETTERS } from '../constants';
-
-interface LetterGalleryProps {
-  onSelectLetter: (letter: Letter) => void;
-}
 
 const container = {
   hidden: { opacity: 0 },
@@ -21,7 +17,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { type: 'spring', damping: 25, stiffness: 200 } },
 };
 
-const LetterGallery: React.FC<LetterGalleryProps> = ({ onSelectLetter }) => {
+const LetterGallery: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center px-4 py-12 md:py-16 overflow-y-auto">
       {/* Header */}
@@ -56,36 +52,36 @@ const LetterGallery: React.FC<LetterGalleryProps> = ({ onSelectLetter }) => {
         className="w-full max-w-lg space-y-4"
       >
         {LETTERS.map((letter) => (
-          <motion.button
+          <motion.div
             key={letter.id}
             variants={item}
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => onSelectLetter(letter)}
-            className="w-full text-left group"
           >
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-5 md:p-6 border border-white/80 shadow-[0_4px_24px_0_rgba(236,72,153,0.08)] hover:shadow-[0_8px_40px_0_rgba(236,72,153,0.15)] transition-all duration-300">
-              <div className="flex items-start gap-4">
-                {/* Emoji / Icon */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-fuchsia-50 border border-pink-100/50 flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-pink-400" />
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <h3 className="font-bold text-gray-800 text-base md:text-lg truncate group-hover:text-pink-600 transition-colors">
-                      {letter.title}
-                    </h3>
-                    <ChevronRight className="w-5 h-5 text-pink-300 flex-shrink-0 group-hover:text-pink-500 group-hover:translate-x-1 transition-all" />
+            <Link to={`/letter/${letter.id}`} className="w-full text-left group block">
+              <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-5 md:p-6 border border-white/80 shadow-[0_4px_24px_0_rgba(236,72,153,0.08)] hover:shadow-[0_8px_40px_0_rgba(236,72,153,0.15)] transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  {/* Icon */}
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-pink-50 to-fuchsia-50 border border-pink-100/50 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-pink-400" />
                   </div>
-                  <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
-                    {letter.preview}
-                  </p>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <h3 className="font-bold text-gray-800 text-base md:text-lg truncate group-hover:text-pink-600 transition-colors">
+                        {letter.title}
+                      </h3>
+                      <ChevronRight className="w-5 h-5 text-pink-300 flex-shrink-0 group-hover:text-pink-500 group-hover:translate-x-1 transition-all" />
+                    </div>
+                    <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+                      {letter.preview}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.button>
+            </Link>
+          </motion.div>
         ))}
       </motion.div>
     </div>

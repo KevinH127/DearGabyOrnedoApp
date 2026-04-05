@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, KeyRound, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { APP_PASSWORD } from '../constants';
 
-interface PasswordScreenProps {
-  onSuccess: () => void;
-}
-
-const PasswordScreen: React.FC<PasswordScreenProps> = ({ onSuccess }) => {
+const PasswordScreen: React.FC = () => {
   const [input, setInput] = useState('');
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.toLowerCase().trim() === APP_PASSWORD.toLowerCase()) {
-      onSuccess();
+      localStorage.setItem('unlocked', 'true');
+      navigate('/gallery');
     } else {
       setError(true);
       setTimeout(() => setError(false), 500);
