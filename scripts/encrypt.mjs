@@ -30,8 +30,24 @@ if (files.length === 0) {
   process.exit(0);
 }
 
+let encryptedCount = 0;
+let skippedCount = 0;
+
 for (const file of files) {
-  const plaintext = fs.readFileSync(path.join(SRC_DIR, file), 'utf8');
+  const srcPath = path.join(SRC_DIR, file);
+  const outPath = path.join(OUT_DIR, file);
+
+  // Skip if already exists and hasn't changed
+  if (fs.existsSync(outPath)) {
+    const srcStat = fs.statSync(srcPath);
+    const outStat = fs.statSync(outPath);
+    if (srcStat.mtime <= outStat.mtime) {
+      skippedCount++;
+      continue;
+    }
+  }
+
+  const plaintext = fs.readFileSync(srcPath, 'utf8');
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
   let encrypted = cipher.update(plaintext, 'utf8', 'base64');
@@ -39,8 +55,13 @@ for (const file of files) {
 
   // Store as iv:encrypted (both base64)
   const output = iv.toString('base64') + ':' + encrypted;
-  fs.writeFileSync(path.join(OUT_DIR, file), output);
+  fs.writeFileSync(outPath, output);
   console.log(`✅ Encrypted: ${file}`);
+  encryptedCount++;
 }
 
-console.log(`\nDone! ${files.length} letter(s) encrypted to public/letters/`);
+if (encryptedCount === 0 && skippedCount > 0) {
+  console.log('✨ All letters are already up to date!');
+} else {
+  console.log(`\nDone! ${encryptedCount} letter(s) encrypted, ${skippedCount} skipped.`);
+}
