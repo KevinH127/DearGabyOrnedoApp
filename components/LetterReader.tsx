@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LETTERS } from '../constants';
 import { decryptLetter } from '../decrypt';
@@ -9,7 +9,9 @@ const LetterReader: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const letter = LETTERS.find((l) => l.id === Number(id));
+  const currentIndex = LETTERS.findIndex((l) => l.id === Number(id));
+  const letter = currentIndex !== -1 ? LETTERS[currentIndex] : undefined;
+  const nextLetter = currentIndex < LETTERS.length - 1 ? LETTERS[currentIndex + 1] : null;
 
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState(false);
@@ -111,6 +113,26 @@ const LetterReader: React.FC = () => {
               </motion.p>
             ))}
           </div>
+
+          {/* Next letter button */}
+          {nextLetter && content && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="px-8 md:px-12 pb-8 md:pb-10 pt-2"
+            >
+              <motion.button
+                whileHover={{ scale: 1.02, x: 4 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => navigate(`/letter/${nextLetter.id}`)}
+                className="ml-auto flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-r from-pink-400 to-fuchsia-400 text-white font-semibold text-sm shadow-lg shadow-pink-200/40 hover:shadow-pink-300/50 transition-shadow duration-300 group"
+              >
+                <span>Next Letter</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       </motion.div>
     </div>
