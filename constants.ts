@@ -24,4 +24,10 @@ export const LETTERS: Letter[] = [
     preview: "Hope you had lots of fun this weekend",
     file: "letter-3.txt",
   },
+  {
+    id: 4,
+    title: "April 5, 2026",
+    preview: "Happy Easter Gaby",
+    file: "letter-4.txt"
+  },
 ];
