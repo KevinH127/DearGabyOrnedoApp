@@ -2,25 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { LETTERS } from '../constants';
+import { Letter } from '../types';
 import { decryptLetter } from '../decrypt';
 
 const LetterReader: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const currentIndex = LETTERS.findIndex((l) => l.id === Number(id));
-  const letter = currentIndex !== -1 ? LETTERS[currentIndex] : undefined;
-  const nextLetter = currentIndex < LETTERS.length - 1 ? LETTERS[currentIndex + 1] : null;
-
+  const [letters, setLetters] = useState<Letter[]>([]);
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState(false);
+  const [loadingMeta, setLoadingMeta] = useState(true);
 
+  // Fetch letter metadata
+  useEffect(() => {
+    fetch('/api/letters')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
+      .then((data) => setLetters(data.letters || []))
+      .catch(() => setError(true))
+      .finally(() => setLoadingMeta(false));
+  }, []);
+
+  const currentIndex = letters.findIndex((l) => l.id === Number(id));
+  const letter = currentIndex !== -1 ? letters[currentIndex] : undefined;
+  const nextLetter = currentIndex < letters.length - 1 ? letters[currentIndex + 1] : null;
+
+  // Fetch and decrypt letter content when letter metadata is available
   useEffect(() => {
     if (!letter) return;
     setContent(null);
     setError(false);
-    fetch(`/letters/${letter.file}`)
+
+    fetch(letter.url)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load');
         return res.text();
@@ -29,6 +45,14 @@ const LetterReader: React.FC = () => {
       .then((decrypted) => setContent(decrypted))
       .catch(() => setError(true));
   }, [letter]);
+
+  if (loadingMeta) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-6 h-6 text-pink-300 animate-spin" />
+      </div>
+    );
+  }
 
   if (!letter) {
     return (

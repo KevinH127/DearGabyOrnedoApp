@@ -2,5 +2,6 @@ export interface Letter {
   id: number;
   title: string;
   preview: string;
-  file: string; // filename in public/letters/
+  url: string;       // Vercel Blob URL for the encrypted content
+  createdAt: string;  // ISO date string
 }

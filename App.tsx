@@ -5,6 +5,7 @@ import Background from './components/Background';
 import PasswordScreen from './components/PasswordScreen';
 import LetterGallery from './components/LetterGallery';
 import LetterReader from './components/LetterReader';
+import AdminPage from './components/AdminPage';
 
 // Wraps routes that require the user to have unlocked the app
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -39,6 +40,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* Admin page — has its own password gate */}
+            <Route path="/admin" element={<AdminPage />} />
             {/* Catch-all: redirect unknown paths to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

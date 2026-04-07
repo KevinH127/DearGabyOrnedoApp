@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
+    "@vercel/blob": "^2.3.3",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.1",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^12.33.0",
     "html2canvas": "^1.4.1",
