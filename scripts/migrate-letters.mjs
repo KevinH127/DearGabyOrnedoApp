@@ -76,7 +76,7 @@ async function migrate() {
     console.log(`📤 Uploading ${meta.file}...`);
     const blob = await put(`letters/${meta.file}`, encryptedContent, {
       access: 'public',
-      addRandomSuffix: false,
+      addRandomSuffix: false, allowOverwrite: true,
       token: BLOB_TOKEN,
     });
 
@@ -98,7 +98,7 @@ async function migrate() {
     JSON.stringify({ letters }, null, 2),
     {
       access: 'public',
-      addRandomSuffix: false,
+      addRandomSuffix: false, allowOverwrite: true,
       token: BLOB_TOKEN,
     },
   );

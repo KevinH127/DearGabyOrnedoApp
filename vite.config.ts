@@ -70,7 +70,7 @@ function apiPlugin(env) {
 
             const contentBlob = await put(`letters/letter-${newId}.txt`, encryptedContent, {
               access: 'public',
-              addRandomSuffix: false,
+              addRandomSuffix: false, allowOverwrite: true,
               token,
             });
 
@@ -86,7 +86,7 @@ function apiPlugin(env) {
 
             await put('meta/letters.json', JSON.stringify({ letters }, null, 2), {
               access: 'public',
-              addRandomSuffix: false,
+              addRandomSuffix: false, allowOverwrite: true,
               token,
             });
 
@@ -134,7 +134,7 @@ function apiPlugin(env) {
             if (encryptedContent) {
               const contentBlob = await put(`letters/letter-${id}.txt`, encryptedContent, {
                 access: 'public',
-                addRandomSuffix: false,
+                addRandomSuffix: false, allowOverwrite: true,
                 token,
               });
               letters[letterIndex].url = contentBlob.url;
@@ -144,7 +144,7 @@ function apiPlugin(env) {
 
             await put('meta/letters.json', JSON.stringify({ letters }, null, 2), {
               access: 'public',
-              addRandomSuffix: false,
+              addRandomSuffix: false, allowOverwrite: true,
               token,
             });
 

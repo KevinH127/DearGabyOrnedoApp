@@ -98,7 +98,7 @@ async function main() {
     console.log(`📤 Encrypting & uploading ${meta.file}...`);
     const blob = await put(`letters/letter-${nextId}.txt`, encryptedContent, {
       access: 'public',
-      addRandomSuffix: false,
+      addRandomSuffix: false, allowOverwrite: true,
       token: BLOB_TOKEN,
     });
 
@@ -118,7 +118,7 @@ async function main() {
   console.log('\n📤 Updating metadata...');
   await put('meta/letters.json', JSON.stringify({ letters: blobLetters }, null, 2), {
     access: 'public',
-    addRandomSuffix: false,
+    addRandomSuffix: false, allowOverwrite: true,
     token: BLOB_TOKEN,
   });
 

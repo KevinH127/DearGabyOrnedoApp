@@ -46,7 +46,7 @@ async function handleGet(_req, res) {
     return res.status(200).json(data);
   } catch (error) {
     console.error('GET /api/letters error:', error);
-    return res.status(500).json({ error: 'Failed to fetch letters' });
+    return res.status(500).json({ error: 'Failed to fetch letters', detail: error?.message || String(error) });
   }
 }
 
@@ -83,6 +83,7 @@ async function handlePost(req, res) {
     const contentBlob = await put(`letters/letter-${newId}.txt`, encryptedContent, {
       access: 'public',
       addRandomSuffix: false,
+      allowOverwrite: true,
     });
 
     // Create new letter entry
@@ -100,12 +101,13 @@ async function handlePost(req, res) {
     await put('meta/letters.json', JSON.stringify({ letters }, null, 2), {
       access: 'public',
       addRandomSuffix: false,
+      allowOverwrite: true,
     });
 
     return res.status(201).json({ letter: newLetter });
   } catch (error) {
     console.error('POST /api/letters error:', error);
-    return res.status(500).json({ error: 'Failed to create letter' });
+    return res.status(500).json({ error: 'Failed to create letter', detail: error?.message || String(error) });
   }
 }
 
@@ -145,6 +147,7 @@ async function handlePut(req, res) {
       const contentBlob = await put(`letters/letter-${id}.txt`, encryptedContent, {
         access: 'public',
         addRandomSuffix: false,
+      allowOverwrite: true,
       });
       letters[letterIndex].url = contentBlob.url;
     }
@@ -157,6 +160,7 @@ async function handlePut(req, res) {
     await put('meta/letters.json', JSON.stringify({ letters }, null, 2), {
       access: 'public',
       addRandomSuffix: false,
+      allowOverwrite: true,
     });
 
     return res.status(200).json({ letter: letters[letterIndex] });
