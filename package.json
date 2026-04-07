@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "encrypt": "node scripts/encrypt.mjs"
+    "encrypt": "node scripts/encrypt.mjs",
+    "upload": "node scripts/upload-letters.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",

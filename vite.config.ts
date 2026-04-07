@@ -34,9 +34,9 @@ function apiPlugin(env) {
 
           if (req.method === 'POST') {
             // Parse JSON body
-            const body = await new Promise((resolve) => {
+            const body: any = await new Promise((resolve) => {
               let data = '';
-              req.on('data', (chunk) => (data += chunk));
+              req.on('data', (chunk: string) => (data += chunk));
               req.on('end', () => resolve(JSON.parse(data)));
             });
 
@@ -92,6 +92,64 @@ function apiPlugin(env) {
 
             res.statusCode = 201;
             res.end(JSON.stringify({ letter: newLetter }));
+            return;
+          }
+
+          if (req.method === 'PUT') {
+            const body: any = await new Promise((resolve) => {
+              let data = '';
+              req.on('data', (chunk: string) => (data += chunk));
+              req.on('end', () => resolve(JSON.parse(data)));
+            });
+
+            const { password, id, title, preview, encryptedContent } = body;
+
+            if (password !== env.ADMIN_PASSWORD) {
+              res.statusCode = 401;
+              res.end(JSON.stringify({ error: 'Invalid admin password' }));
+              return;
+            }
+
+            // Load existing metadata
+            const { blobs } = await list({ prefix: 'meta/', token });
+            const metaBlob = blobs.find((b: any) => b.pathname === 'meta/letters.json');
+
+            if (!metaBlob) {
+              res.statusCode = 404;
+              res.end(JSON.stringify({ error: 'No letters found' }));
+              return;
+            }
+
+            const response = await fetch(metaBlob.url);
+            const data = await response.json();
+            const letters = data.letters || [];
+            const letterIndex = letters.findIndex((l: any) => l.id === id);
+
+            if (letterIndex === -1) {
+              res.statusCode = 404;
+              res.end(JSON.stringify({ error: 'Letter not found' }));
+              return;
+            }
+
+            if (encryptedContent) {
+              const contentBlob = await put(`letters/letter-${id}.txt`, encryptedContent, {
+                access: 'public',
+                addRandomSuffix: false,
+                token,
+              });
+              letters[letterIndex].url = contentBlob.url;
+            }
+            if (title) letters[letterIndex].title = title;
+            if (preview) letters[letterIndex].preview = preview;
+
+            await put('meta/letters.json', JSON.stringify({ letters }, null, 2), {
+              access: 'public',
+              addRandomSuffix: false,
+              token,
+            });
+
+            res.statusCode = 200;
+            res.end(JSON.stringify({ letter: letters[letterIndex] }));
             return;
           }
 

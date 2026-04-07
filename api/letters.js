@@ -2,11 +2,12 @@ import { put, list } from '@vercel/blob';
 
 // GET: Return all letter metadata
 // POST: Upload a new encrypted letter (admin password required)
+// PUT: Edit an existing letter (admin password required)
 
 export default async function handler(req, res) {
   // CORS headers for local development
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -19,6 +20,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     return handlePost(req, res);
+  }
+
+  if (req.method === 'PUT') {
+    return handlePut(req, res);
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
@@ -101,5 +106,62 @@ async function handlePost(req, res) {
   } catch (error) {
     console.error('POST /api/letters error:', error);
     return res.status(500).json({ error: 'Failed to create letter' });
+  }
+}
+
+// ─── PUT /api/letters ───────────────────────────────────────────
+async function handlePut(req, res) {
+  try {
+    const { password, id, title, preview, encryptedContent } = req.body;
+
+    // Verify admin password
+    if (password !== process.env.ADMIN_PASSWORD) {
+      return res.status(401).json({ error: 'Invalid admin password' });
+    }
+
+    if (!id) {
+      return res.status(400).json({ error: 'Missing letter id' });
+    }
+
+    // Load existing metadata
+    const { blobs } = await list({ prefix: 'meta/' });
+    const metaBlob = blobs.find((b) => b.pathname === 'meta/letters.json');
+
+    if (!metaBlob) {
+      return res.status(404).json({ error: 'No letters found' });
+    }
+
+    const response = await fetch(metaBlob.url);
+    const data = await response.json();
+    let letters = data.letters || [];
+
+    const letterIndex = letters.findIndex((l) => l.id === id);
+    if (letterIndex === -1) {
+      return res.status(404).json({ error: 'Letter not found' });
+    }
+
+    // Update encrypted content if provided
+    if (encryptedContent) {
+      const contentBlob = await put(`letters/letter-${id}.txt`, encryptedContent, {
+        access: 'public',
+        addRandomSuffix: false,
+      });
+      letters[letterIndex].url = contentBlob.url;
+    }
+
+    // Update metadata if provided
+    if (title) letters[letterIndex].title = title;
+    if (preview) letters[letterIndex].preview = preview;
+
+    // Save updated metadata
+    await put('meta/letters.json', JSON.stringify({ letters }, null, 2), {
+      access: 'public',
+      addRandomSuffix: false,
+    });
+
+    return res.status(200).json({ letter: letters[letterIndex] });
+  } catch (error) {
+    console.error('PUT /api/letters error:', error);
+    return res.status(500).json({ error: 'Failed to update letter' });
   }
 }
